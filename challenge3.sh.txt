@@ -1,0 +1,30 @@
+#!/bin/bash
+
+get_value() {
+  local object="$1"
+  local key="$2"
+
+  # Split the key by '/' to get an array of keys
+  IFS='/' read -ra keys <<< "$key"
+
+  # Iterate through the keys and get the value at each level
+  local value="$object"
+  for i in "${keys[@]}"; do
+    value="$(echo "$value" | jq -r ".$i")"
+  done
+
+  # Return the final value
+  echo "$value"
+}
+
+object='{"a":{"b":{"c":"d"}}}'
+key='a/b/c'
+expected_output='d'
+output="$(get_value "$object" "$key")"
+
+object='{"x":{"y":{"z":"a"}}}'
+key="x/y/z"
+value=$(get_value "$object" "$key")
+echo "Value for key '$key': $value"
+
+                                       
