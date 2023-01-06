@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Query the metadata service for instance metadata
+instance_metadata=$(curl -s http://169.254.169.254/latest/dynamic/instance-identity/document)
+
+# Convert the output to JSON format
+json_metadata=$(echo "$instance_metadata" | jq -c '.')
+
+# Output the JSON
+echo "$json_metadata"
